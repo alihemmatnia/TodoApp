@@ -8,9 +8,11 @@ namespace Todo.Server.Services
 {
     public interface ITodoService
     {
-        Task<bool> AddNewTodo(TodoDto todo);
-        Task<List<TodoDto>> GetAllTodo();
-        Task<bool> DeleteTodo(int Id);
+        void AddNewTodo(ToDo todo);
+        List<ToDo> GetAllTodo();
+        Task DeleteTodo(int Id);
+        Task Ended(int Id);
+        void Save();
     }
 
     public class TodoService : ITodoService
@@ -22,19 +24,29 @@ namespace Todo.Server.Services
             _context = context;
         }
 
-        public Task<bool> AddNewTodo(TodoDto todo)
+        public void AddNewTodo(ToDo todo)
         {
-            throw new NotImplementedException();
+            _context.ToDos.Add(todo);
         }
 
-        public Task<bool> DeleteTodo(int Id)
+        public async Task DeleteTodo(int Id)
         {
-            throw new NotImplementedException();
+            _context.ToDos.Remove(await _context.ToDos.FindAsync(Id));
+        }
+        public void Save()
+        {
+             _context.SaveChanges();
+        }
+        public List<ToDo> GetAllTodo()
+        {
+            return _context.ToDos.OrderByDescending(p=>p.Id).ToList();
         }
 
-        public Task<List<TodoDto>> GetAllTodo()
+        public async Task Ended(int Id)
         {
-            throw new NotImplementedException();
+            var todo=await _context.ToDos.FindAsync(Id);
+            todo.IsEnded = !todo.IsEnded;
+             _context.ToDos.Update(todo);
         }
     }
 
@@ -48,6 +60,6 @@ namespace Todo.Server.Services
         public bool Status { get; set; }
         public string Message { get; set; }
         public string Error { get; set; } = null;
-        public List<TodoDto> Todos { get; set; } = null;
+        public List<ToDo> Todos { get; set; } = null;
     }
 }

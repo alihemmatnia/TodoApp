@@ -1,0 +1,24 @@
+.App {
+  text-align: center;
+}
+
+* {
+    box-sizing: border-box;
+    direction: rtl;
+}
+.header {
+    padding: 30px 40px;
+    text-align: center;
+}
+
+.table-aqu{
+  margin-top: 5%;
+}
+
+body {
+  padding: 20px;
+}
+
+.status{
+  text-decoration: line-through;
+}

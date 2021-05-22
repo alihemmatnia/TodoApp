@@ -12,5 +12,7 @@ namespace Todo.Server.Data
         public int Id { get; set; }
         
         public string Title { get; set; }
+
+        public bool IsEnded { get; set; } = false;
     }
 }

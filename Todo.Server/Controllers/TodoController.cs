@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Todo.Server.Data;
 using Todo.Server.Services;
 
 namespace Todo.Server.Controllers
@@ -24,23 +25,32 @@ namespace Todo.Server.Controllers
         {
             return Ok(new ResponseMessage()
             {
-                Todos = await _todoService.GetAllTodo(),
+                Todos =  _todoService.GetAllTodo(),
                 Status=true
             });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]TodoDto todoDto)
+        public async Task<IActionResult> Post([FromBody]ToDo todo)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ResponseMessage() { Status=false, Error="مقادیر اشتباه است" });
 
-            await _todoService.AddNewTodo(todoDto);
+            _todoService.AddNewTodo(todo);
+            _todoService.Save();
             return Ok(new ResponseMessage()
             {
                 Message = "با موفقیت ذخیره شد",
                 Status = true
             });
+        }
+
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Ended([FromRoute]int Id)
+        {
+            await _todoService.Ended(Id);
+            _todoService.Save();
+            return Ok(new ResponseMessage() {Message="Changed",Status=true });
         }
 
         [HttpDelete("{Id}")]
@@ -50,12 +60,12 @@ namespace Todo.Server.Controllers
                 return BadRequest(new ResponseMessage() { Error = "ایدی را وارد کنید", Status = false });
 
             await _todoService.DeleteTodo(Id);
+            _todoService.Save();
             return Ok(new ResponseMessage()
             {
-                Message = "با موفقیا حذف شد",
+                Message = "با موفقیت حذف شد",
                 Status = true
             });
         }
-
     }
 }

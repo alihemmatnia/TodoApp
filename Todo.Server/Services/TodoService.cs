@@ -50,15 +50,10 @@ namespace Todo.Server.Services
         }
     }
 
-    public record TodoDto
-    {
-        public string Title { get; set; }
-    }
-
     public record ResponseMessage
     {
         public bool Status { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } = "No Message";
         public string Error { get; set; } = null;
         public List<ToDo> Todos { get; set; } = null;
     }

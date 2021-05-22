@@ -37,16 +37,16 @@ namespace Todo.Server
             });
             services.AddDbContext<DataBaseContext>(op=>op.UseSqlServer("Server= .; Database= todoApp;Integrated Security = true"));
             services.AddScoped<ITodoService, TodoService>();
-           services.AddCors(options =>
-        {
-            options.AddPolicy(name: "cors",
-                              builder =>
-                              {
-                                  builder.WithOrigins("https://localhost:5001",
-                                                      "http://localhost:3000").AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                              });
-        });
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "cors",builder =>
+                {
+                    builder.WithOrigins("https://localhost:5001",
+                        "http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

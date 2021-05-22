@@ -10,20 +10,20 @@ class App extends React.Component {
         this.state = {
             todos: [], title: "",
         }
-
-        this.TitleChange=this.TitleChange.bind(this);
-        this.ChangeStatus=this.ChangeStatus.bind(this);
-        this.AddTodo=this.AddTodo.bind(this);
-        this.DeleteTodo=this.DeleteTodo.bind(this);
+        // Binds
+        this.TitleChange = this.TitleChange.bind(this);
+        this.ChangeStatus = this.ChangeStatus.bind(this);
+        this.AddTodo = this.AddTodo.bind(this);
+        this.DeleteTodo = this.DeleteTodo.bind(this);
     }
-    
+
     componentDidMount() {
         axios.get(`${this.baseUrl}/Api/todo`).then(p => this.setState({ todos: p.data.todos }))
     }
 
     // Refresh Data If Update In Todos
-    componentDidUpdate(){
-        axios.get(`${this.baseUrl}/Api/todo`).then(p => this.setState({ todos: p.data.todos })).catch(e=>swal("خطا", "خطایی رخ داد بعدا تلاش کنید","error"))
+    componentDidUpdate() {
+        axios.get(`${this.baseUrl}/Api/todo`).then(p => this.setState({ todos: p.data.todos })).catch(e => swal("خطا", "خطایی رخ داد بعدا تلاش کنید", "error"))
     }
 
     // Add A Todo
@@ -32,14 +32,14 @@ class App extends React.Component {
         if (this.state.title === "") {
             swal("خطا", "نباید عنوان خالی باشد", "error");
         }
-        else{
-            axios.post(`${this.baseUrl}/Api/todo`, { 'title': this.state.title }).then(p => swal("موفقیت","با موفقیت افزوده شد","success")).catch(e=>swal("خطا", "خطایی رخ داد بعدا تلاش کنید","error"))
+        else {
+            axios.post(`${this.baseUrl}/Api/todo`, { 'title': this.state.title }).then(p => swal("موفقیت", "با موفقیت افزوده شد", "success")).catch(e => swal("خطا", "خطایی رخ داد بعدا تلاش کنید", "error"))
         }
     }
 
     // Change Status(If true Changed To false Or )
     ChangeStatus(id) {
-        axios.put(`${this.baseUrl}/api/todo/${id}`).then(e => swal("موفقیت","با موفقیت وضعیت تغییر کرد","success")).catch(e=>swal("خطا", "خطایی رخ داد بعدا تلاش کنید","error"))
+        axios.put(`${this.baseUrl}/api/todo/${id}`).then(e => swal("موفقیت", "با موفقیت وضعیت تغییر کرد", "success")).catch(e => swal("خطا", "خطایی رخ داد بعدا تلاش کنید", "error"))
     }
 
     // Handle Change Title Value
@@ -49,20 +49,20 @@ class App extends React.Component {
 
     // Delete Todo With  Id
     DeleteTodo(id) {
-        axios.delete(`${this.baseUrl}/Api/todo/${id}`).then(p =>swal("موفق","با موفقیت حذف شد", "warning")).catch(e=>swal("خطا", "خطایی رخ داد بعدا تلاش کنید","error"))
+        axios.delete(`${this.baseUrl}/Api/todo/${id}`).then(p => swal("موفق", "با موفقیت حذف شد", "warning")).catch(e => swal("خطا", "خطایی رخ داد بعدا تلاش کنید", "error"))
     }
 
     // render Page
     render() {
         return (
             <div className="App container">
-                <div  className="header">
+                <div className="header">
                     <h3>کار های من</h3>
-                   <form onSubmit={(e)=>this.AddTodo(e)}>
-                   <input onChange={this.TitleChange} type="text"  className="form-control" placeholder="عنوان"></input>
-                   <br></br>
-                    <input type="submit" className="btn btn-primary" value="افزودن"></input>
-                   </form>
+                    <form onSubmit={(e) => this.AddTodo(e)}>
+                        <input onChange={this.TitleChange} type="text" className="form-control" placeholder="عنوان"></input>
+                        <br></br>
+                        <input type="submit" className="btn btn-primary" value="افزودن"></input>
+                    </form>
                 </div>
 
                 <table className="table table-striped table-hover ">
@@ -75,13 +75,19 @@ class App extends React.Component {
                     </thead>
                     <tbody>
                         {
-                            this.state.todos.map((e) => <tr key={e.id}><td className={e.isEnded?'status':''} key={e.id}>{e.title}</td><td><button  className="btn btn-danger" onClick={() => this.DeleteTodo(e.id)}>حذف</button></td><td><input type="checkbox" onClick={()=>this.ChangeStatus(e.id)} defaultChecked={e.isEnded?true:false}></input></td></tr>)
+                            this.state.todos.map((e) => {
+                                return (
+                                    <tr key={e.id}>
+                                        <td className={e.isEnded ? 'status' : ''} key={e.id}>{e.title}</td>
+                                        <td><button className="btn btn-danger" onClick={() => this.DeleteTodo(e.id)}>حذف</button></td>
+                                        <td><input type="checkbox" onClick={() => this.ChangeStatus(e.id)} defaultChecked={e.isEnded ? true : false}></input></td>
+                                    </tr>
+                                )
+                            })
                         }
                     </tbody>
                 </table>
-
             </div>
-
         );
     }
 }

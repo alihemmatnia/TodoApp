@@ -35,7 +35,7 @@ namespace Todo.Server
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo.Server", Version = "v1" });
             });
-            services.AddDbContext<DataBaseContext>(op=>op.UseSqlServer("Server= .; Database= todoApp;Integrated Security = true"));
+            services.AddDbContext<DataBaseContext>(op=>op.UseSqlServer(Configuration.GetConnectionString("string")));
             services.AddScoped<ITodoService, TodoService>();
             services.AddCors(options =>
             {

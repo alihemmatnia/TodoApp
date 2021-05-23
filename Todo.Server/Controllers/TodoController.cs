@@ -45,12 +45,25 @@ namespace Todo.Server.Controllers
             });
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("Ended/{Id}")]
         public async Task<IActionResult> Ended([FromRoute]int Id)
         {
             await _todoService.Ended(Id);
             _todoService.Save();
-            return Ok(new ResponseMessage() {Message="Changed",Status=true });
+            return Ok(new ResponseMessage() {Message="تغییر یافت",Status=true });
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] ToDo todo){
+            if (!ModelState.IsValid)
+                return BadRequest(new ResponseMessage() { Status=false, Error="مقادیر اشتباه است" });
+
+            _todoService.Edit(todo);
+            _todoService.Save();
+            return Ok(new ResponseMessage(){
+                Message="با موفقیت ویرایش شد",
+                Status=true
+            });
         }
 
         [HttpDelete("{Id}")]

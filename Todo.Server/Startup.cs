@@ -35,7 +35,7 @@ namespace Todo.Server
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo.Server", Version = "v1" });
             });
-            services.AddDbContext<DataBaseContext>(op=>op.UseSqlServer(Configuration.GetConnectionString("string")));
+            services.AddDbContext<DataBaseContext>(op=>op.UseSqlite("data source=db.db"));
             services.AddScoped<ITodoService, TodoService>();
             services.AddCors(options =>
             {
@@ -45,6 +45,8 @@ namespace Todo.Server
                         "http://localhost:3000")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
+
+
                 });
             });
         }

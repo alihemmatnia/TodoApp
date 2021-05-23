@@ -12,6 +12,7 @@ namespace Todo.Server.Services
         List<ToDo> GetAllTodo();
         Task DeleteTodo(int Id);
         Task Ended(int Id);
+        void Edit(ToDo todo);
         void Save();
     }
 
@@ -22,6 +23,10 @@ namespace Todo.Server.Services
         public TodoService(DataBaseContext context)
         {
             _context = context;
+        }
+
+        public void Edit(ToDo todo){
+            _context.ToDos.Update(todo);
         }
 
         public void AddNewTodo(ToDo todo)
